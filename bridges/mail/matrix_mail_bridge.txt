@@ -1,0 +1,93 @@
+#Matrix-mail bridge
+https://github.com/JojiiOfficial/Matrix-EmailBridge#Get-started
+#at this time of writing requires go1.18
+
+1.installation--------------------------
+
+git clone https://github.com/JojiiOfficial/Matrix-EmailBridge
+cd Matrix-EmailBridge/main
+go get -v -u
+go build -o emailbridge
+#TO create empty config
+./emailbridge
+
+
+2.Now create bot acc on matrix
+
+
+According to documentation you should use token but its not working but I'll leave it here just in the future use cases!!!!!!!!!!!!!!
+    3. (a) Get access token to your matrix server
+    #CLI
+    curl -XPOST -d '{"type":"m.login.password", "user":"@mailBotUsername:your-domain.com", "password":"mailbotPassword"}' "https://matrix.your-domain.com/_matrix/client/r0/login"
+
+    #GUI
+        Log in to the account you want to get the access token for. Click on the name in the top left corner, then "Settings".
+        Click the "Help & About" tab (left side of the dialog).
+        Scroll to the bottom and click on <click to reveal> part of Access Token.
+        Copy
+
+    
+
+
+4.Edit the config
+vim cfg.json
+
+{
+  "allowed_servers": [
+    "matrix.test.com"
+  ],
+  "defaultmailcheckinterval": 30,
+  "htmldefault": false,
+  "markdownenabledbydefault": true,
+  "matrixserver": "matrix.test.com",
+  "matrixuserid": "@bot:matrix.test.com",
+  "matrixuserpassword": "Redcar123!"
+}
+
+5. Run the bridge in the backround
+./emailbridge &
+
+6. Invate the bot to the room 
+#bot should greed you with the message 
+Hey you have invited me to a new room. Enter !login to bridge this room to a Mail account
+
+
+7. Setup the bot with mail acc
+IMAP to recieve mails
+SMTP to send mails
+
+!setup imap, host:port, username/email, password, mailbox, ignoreSSL
+!setup smtp, host:port, email, password, ignoreSSL
+
+Example
+IMAP
+!setup imap, mail.test.com, mailmatrix@test.com, RedCar123!, INBOX, false
+SMTP
+!setup smtp, smtp.thiss.tech:587, mailmatrix@thiss.tech, Margotka123!, ignoreSSL
+
+
+
+How to write an mail
+---------------------------------------
+1. !write <email@test.com>
+2. Type subject
+3. Type message or !send
+4. !send
+
+Aviable bot commands
+-------------------------------------\
+!help
+!setup imap/smtp, host:port, username(em@ail.com), password, <mailbox (only for imap)>, ignoreSSLcert(true/false) - creates a bridge for this room
+!ping - gets information about the email bridge for this room
+!help - shows this command help overview
+!write (receiver(s) email(s) splitted by space!) <markdown default:true>- sends an email to a given address
+!mailboxes - shows a list with all mailboxes available on your IMAP server
+!setmailbox (mailbox) - changes the mailbox for the room
+!mailbox - shows the currently selected mailbox
+!sethtml (on/off or true/false) - sets HTML-rendering for messages on/off
+!logout remove email bridge from current room
+!leave unbridge the current room and kick the bot
+
+---- Email writing commands ----
+!send - sends the email
+!rm <file> - removes given attachment from email
